@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sukiyaki's greedSnake v2.2</title>
+    <script type="text/javascript" src="greedSnakeFunction.js"></script>
+    <style type="text/css">
+        .pause{
+            width: 100px;
+            height: 30px;
+            position: absolute;
+            border-radius: 30px;
+            background-color: #FF0099;
+            opacity: 0.3;
+            left: 520px;
+            top: 550px;
+            font-size: large;
+            color: #FFF;
+            text-align: center;
+            margin: auto;
+        }
+        .begin{
+            width: 100px;
+            height: 30px;
+            position: absolute;
+            border-radius: 30px;
+            background-color: #0eff0c;
+            opacity: 0.3;
+            left: 520px;
+            top: 520px;
+            font-size: large;
+            color: #FFF;
+            text-align: center;
+            margin: auto;
+        }
+        .background{
+            width : 520px;
+            height: 520px;
+            background-color: dimgrey;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: large;
+            color: #FFFFFF;
+            text-align: center;
+        }
+        .quick{
+            width: 100px;
+            height: 30px;
+            position: absolute;
+            border-radius: 30px;
+            background-color: #c401ff;
+            opacity: 0.3;
+            left: 510px;
+            top: 570px;
+            font-size: large;
+            color: #FFF;
+            text-align: center;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="background">Sukiyaki's greedSnake v2.2</div>
+<div class="pause"><span>暂停</span></div>
+<div class="begin"><span>开始</span></div>
+<!--<div class="quick"><span>加速</span></div>-->
+
+
+<script type="text/javascript">
+    function creatnail() {
+        var div = document.createElement('div');
+        document.body.appendChild(div);
+        div.style.width = '20px';
+        div.style.height = '20px';
+        div.style.backgroundColor = '#a49cff';
+        div.style.position = 'absolute';
+        div.style.left =  '0px';
+        div.style.top = '0px';
+        div.style.display = 'block';
+        return div;
+    }
+    function randomApple() {
+        var random1 = parseInt(Math.random()*50) * 10;
+        var random2 = parseInt(Math.random()*50) * 10;
+        var div = document.createElement('div');
+        document.body.appendChild(div);
+        div.style.width = '10px';
+        div.style.height = '10px';
+        div.style.backgroundColor = 'pink';
+        div.style.position = 'absolute';
+        div.style.left = random1+'px';
+        div.style.top =  random2+'px';
+        div.style.display = 'block';
+        return div;
+    }
+    function eatfood(){
+        body[count] = creatnail();
+        count ++ ;
+    }
+    function ahead(direct) {
+        if (direct === 0){
+            body[0].style.left = parseInt(body[0].style.left) - 10 + 'px';
+        } else if(direct === 1){
+            body[0].style.top = parseInt(body[0].style.top) - 10 +'px';
+        }else if (direct === 2){
+            body[0].style.left = parseInt(body[0].style.left) + 10 +'px';
+        } else if (direct === 3){
+            body[0].style.top = parseInt(body[0].style.top) + 10  +'px';
+        }
+    }
+    function overBord(div,width,height) {
+        if(parseInt(div.style.top) > height){
+            div.style.top = '0px';
+        }else if(parseInt(div.style.left) > width){
+            div.style.left = '0px';
+        }else if(parseInt(div.style.top) < 0){
+            div.style.top = height + 'px';
+        }else if (parseInt(div.style.left) < 0){
+            div.style.left = width + 'px';
+        }
+        return div;
+    }
+    var pause = document.getElementsByClassName('pause')[0];
+    var begin = document.getElementsByClassName('begin')[0];
+    var quick = document.getElementsByClassName('quick')[0];
+    var count = 1;
+    var body = [];
+    var direct = 2;
+    var beleft = [];
+    var betop = [];
+    var apple  = randomApple();
+    var appleX,appleY;
+    var speed = 50;
+    var beginKey = true;
+    var timer;
+    // var quickKey = true;
+    speed = 110 - prompt('速度值（max=100, min=10）','60');
+
+    body[0] = creatnail();
+    eatfood(); eatfood();eatfood();
+    body[0].style.backgroundColor = 'green';
+    document.addEventListener('keydown',function (ev) {
+        if(ev.which === 37 ){
+            direct = 0;  //  left
+        }else if(ev.which === 38){
+            direct = 1;  // up
+        }else if (ev.which === 39){
+            direct = 2; // right
+        } else if (ev.which === 40){
+            direct = 3;  // down
+        }
+    },false);
+
+    // quick.addEventListener('click',function () {
+    //     if (quickKey === true) {
+    //         speed = speed + 10;
+    //         quickKey = false;
+    //     }
+    // },false);
+
+    begin.addEventListener('click',function () {
+        if( beginKey === true) {
+            timer = setInterval(function () {
+                if (apple.style.display === 'none') {
+                    apple = randomApple();
+                }
+                appleX = apple.style.left;
+                appleY = apple.style.top;
+                if (parseInt(body[0].style.left) === parseInt(appleX)
+                    && parseInt(body[0].style.top) === parseInt(appleY)||
+                    parseInt(body[0].style.left) + 10 === parseInt(appleX)
+                    && parseInt(body[0].style.top) === parseInt(appleY)||
+                    parseInt(body[0].style.left) === parseInt(appleX)
+                    && parseInt(body[0].style.top) + 10 === parseInt(appleY)) {
+                    apple.style.display = 'none';
+                    eatfood();
+                }
+                ahead(direct);
+                overBord(body[0], 500, 500);
+                for (var i = 1; i < count; i++) {
+                    body[i].style.left = beleft[i - 1] + 'px';
+                    body[i].style.top = betop[i - 1] + 'px';
+                    beleft[i - 1] = parseInt(body[i - 1].style.left);
+                    betop[i - 1] = parseInt(body[i - 1].style.top);
+                }
+            }, speed);
+            beginKey = false;
+        }
+    },false);
+
+    pause.addEventListener('click',function () {
+        clearInterval(timer);
+        beginKey = true;
+    },false);
+
+</script>
+
+</body>
+</html>
