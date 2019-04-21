@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sukiyaki's greedSnake v3.0</title>
+    <script type="text/javascript" src="greedSnakeFunction.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<div class="box">
+    <div class="content">Sukiyaki's greedSnake v3.0</div>
+</div>
+<div class="pause"><span>暂停</span></div>
+<div class="begin"><span>开始</span></div>
+<div class="point"><span></span></div>
+<audio class="video" controls autoplay loop>
+    <source src="ZARD%20-%20CAN'T%20TAKE%20MY%20EYES%20OFF%20OF%20YOU.mp3">
+</audio>
+<div id="myModal" class="modal">
+    <span class="close" onclick="document.getElementById('myModal').style.display='none'">
+        &times;
+    </span>
+    <img class="modal-content" id="img01" src="die.jpg" style="display: none">
+    <div id="caption"></div>
+</div>
+<script type="text/javascript">
+    var modal = document.getElementById('myModal');
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    captionText.innerHTML = '你死了,你玩贪吃蛇像cxk<br>不过全知全能的Sukiyaki会复活你';
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    };
+    var pause = document.getElementsByClassName('pause')[0];
+    var begin = document.getElementsByClassName('begin')[0];
+    var box = document.getElementsByClassName('box')[0];
+    var point = document.getElementsByClassName('point')[0];
+    var point2  = point.getElementsByTagName('span')[0];
+    var count = 1;
+    var body = [];
+    var direct = 2;
+    var beleft = [];
+    var betop = [];
+    var appleX,appleY;
+    var speed = 40;
+    var beginKey = true;
+    var timer;
+    var initLeft = box.offsetLeft, initTop = box.offsetTop;
+    var apple  = randomApple();
+    var dieKey = false;
+    pause.style.left = initLeft + 530 + 'px';
+    pause.style.top = initTop + 480 + 'px';
+    begin.style.left = initLeft + 530 + 'px';
+    begin.style.top = initTop + 440 + 'px';
+    point.style.left = initLeft + 530 + 'px';
+    point.style.top = initTop + 'px';
+    body[0] = creatnail();
+    eatfood(); eatfood();eatfood();
+    body[0].style.backgroundColor = '#89ff00';
+    document.addEventListener('keydown',function (ev) {
+        if(ev.which === 37 ){
+            direct = 0;  //  left
+        }else if(ev.which === 38){
+            direct = 1;  // up
+        }else if (ev.which === 39){
+            direct = 2; // right
+        } else if (ev.which === 40){
+            direct = 3;  // down
+        }
+    },false);
+    begin.addEventListener('click',function () {
+        if( beginKey === true) {
+            speed = 110 - prompt('速度值（max=100, min=10）','70');
+            timer = setInterval(function () {
+
+                if (apple.style.display === 'none') {
+                    apple = randomApple();
+                }
+                appleX = apple.style.left;
+                appleY = apple.style.top;
+                if (parseInt(body[0].style.left) === parseInt(appleX)
+                    && parseInt(body[0].style.top) === parseInt(appleY)) {
+                    apple.style.display = 'none';
+                    eatfood();
+                }
+                ahead(direct);
+                overBord(body[0], 500, 500);
+                for (var i = 1; i < count; i++) {
+                    body[i].style.left = beleft[i - 1] + 'px';
+                    body[i].style.top = betop[i - 1] + 'px';
+                    beleft[i - 1] = parseInt(body[i - 1].style.left);
+                    betop[i - 1] = parseInt(body[i - 1].style.top);
+                }
+                die();
+                if(dieKey === true){
+                    clearInterval(timer);
+                    reborn();
+                    modal.style.display = "block";
+                    modalImg.style.display = 'block';
+                    if( count % 2 === 0){
+                        modalImg.src = 'Zard.jpg';
+                    }else{
+                        modalImg.src = 'die.jpg';
+                    }
+                    beginKey = true;
+                }
+                point2.innerText = '分数：'+ (count - 4);
+            }, speed);
+            beginKey = false;
+        }
+    },false);
+    pause.addEventListener('click',function () {
+        clearInterval(timer);
+        beginKey = true;
+    },false);
+</script>
+</body>
+</html>
