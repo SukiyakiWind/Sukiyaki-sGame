@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>rebound</title>
+    <style>
+        #box{
+            width: 500px;
+            height: 300px;
+            position: absolute;
+            border:1px solid #CC3299;
+            left: 0;
+            top: 0;
+        }
+        #boll{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border:1px solid #BC1717;
+            background: #ecff00;
+            position: absolute;
+            top: 66px;
+            left: 88px;
+        }
+        .board{
+            width: 100px;
+            height: 15px;
+            border-radius: 15px;
+            background: #BC1717;
+            position: absolute;
+            left: 150px;
+            top:250px;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <div id="boll"></div>
+    <div class="board"></div>
+</div>
+<script>
+    var box = document.getElementById('box');
+    var boll =document.getElementById('boll');
+    var board = document.getElementsByClassName('board')[0];
+    board.style.left = '100px';
+    board.style.top = '250px';
+    var bollHeight = boll.clientHeight;
+    var bollWidth = boll.clientWidth;
+    document.addEventListener('keydown',function (ev) {
+        console.log(ev.which);
+        if(ev.which === 37){
+            board.style.left = parseInt(board.style.left) - 10 + 'px';
+        }else if (ev.which=== 39){
+            board.style.left = parseInt(board.style.left) + 10 + 'px';
+        }
+    },false);
+
+    var x=1,
+        y=1,
+        timer1=null,
+        movex=1,
+        movey=1;
+    timer1=setInterval(function(){
+        if (movex) {
+            x++;
+            if (x>=box.clientWidth-boll.clientWidth) {
+                movex=0;
+            }
+            boll.style.left=x+'px';
+        }
+        else{
+            x--;
+            if (x<=0) {
+                movex=1;
+            }
+            boll.style.left=x+'px';
+        }
+        if (movey) {
+            y++;
+            if (y>=box.clientHeight-boll.clientHeight
+                || (board.offsetLeft<=x && x<=board.offsetLeft+110  && board.offsetTop === y+10  ))
+            {
+                movey=0;
+            }
+            boll.style.top=y+'px';
+        }else{
+            y--;
+            if (y<=0
+                || (board.offsetLeft<=x && x<=board.offsetLeft+110  &&y===board.offsetTop+15)
+            ) {
+                movey=1;
+            }boll.style.top=y+'px';
+        }
+    },1)
+</script>
+</body>
+</html>
