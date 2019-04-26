@@ -96,14 +96,14 @@
                 if(dieKey === true){
                     clearInterval(timer);
                     reborn();
-                    modal.style.display = "block";
-                    modalImg.style.display = 'block';
                     if( count % 2 === 0){
                         modalImg.src = 'Zard.jpg';
                     }else{
                         modalImg.src = 'die.jpg';
                     }
                     beginKey = true;
+                    modal.style.display = "block";
+                    modalImg.style.display = 'block';
                 }
                 point2.innerText = '分数：'+ (count - 4);
             }, speed);
