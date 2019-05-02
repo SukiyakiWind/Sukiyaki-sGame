@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>rebound</title>
+    <!--<script type = text/javascript src="ReboundBallFn.js"></script>-->
     <style>
         #box{
             width: 500px;
@@ -39,6 +40,36 @@
     <div class="board"></div>
 </div>
 <script>
+    function creatbox() {
+        var div = document.createElement('div');
+        document.body.appendChild(div);
+        div.style.width = '20px';
+        div.style.height = '20px';
+        div.style.position = 'absolute';
+        div.style.left = initLeft + 'px';
+        div.style.top = initTop +'px';
+        div.style.backgroundColor = 'skyblue';
+        div.style.display = 'block';
+        div.style.opacity = '0.7';
+        div.style.borderColor = '#BC1717';
+        div.style.borderStyle = 'solid';
+        div.style.borderWidth = '1px';
+        return div;
+    }
+    var initLeft = 50 ;
+    var initTop = 20;
+    var divBox = [],divBoxLeft = [],divBoxTop = [],boxCount = 0;
+    for (var i = 0; i <= 17; i++){
+        divBox[i] = creatbox();
+        if (i === 0){
+            divBox[i].style.left = '50px';
+        }else{
+            divBox[i].style.left = parseInt(divBox[i-1].style.left) + divBox[i].offsetWidth + 'px';
+        }
+        divBoxLeft[i] = divBox[i].offsetLeft;
+        divBoxTop[i] = divBox[i].offsetTop;
+        boxCount++;
+    }
     var box = document.getElementById('box');
     var boll =document.getElementById('boll');
     var board = document.getElementsByClassName('board')[0];
@@ -55,12 +86,46 @@
         }
     },false);
 
-    var x=1,
-        y=1,
+    var x=66,
+        y=66,
         timer1=null,
-        movex=1,
-        movey=1;
+        movex=1,//1为右，0为左
+        movey=1;//1为下，0为上
     timer1=setInterval(function(){
+        for(var i = 0; i < boxCount; i++ ){
+            if(movex){
+                if(x >= divBox[i].offsetLeft - bollWidth && x <= divBox[i].offsetLeft + divBox[i].offsetWidth
+                && y >= divBox[i].offsetTop - bollWidth && y <= divBox[i].offsetTop + divBox[i].offsetHeight
+                && divBox[i].style.display === 'block'){
+                    movex = 0;
+                    divBox[i].style.display = 'none';
+                }
+            }else{
+                if(x >= divBox[i].offsetLeft - bollWidth && x <= divBox[i].offsetLeft + divBox[i].offsetWidth
+                    && y >= divBox[i].offsetTop - bollWidth  && y <= divBox[i].offsetTop + divBox[i].offsetHeight
+                    && divBox[i].style.display === 'block'){
+                    movex = 1;
+                    divBox[i].style.display = 'none';
+                }
+            }
+            if(movey){
+                if(x >= divBox[i].offsetLeft - bollWidth && x <= divBox[i].offsetLeft + divBox[i].offsetWidth
+                    && y >= divBox[i].offsetTop - bollWidth  && y <= divBox[i].offsetTop + divBox[i].offsetHeight
+                    && divBox[i].style.display === 'block'){
+                    movey = 0;
+                    divBox[i].style.display = 'none';
+                }
+            }else{
+                if(x >= divBox[i].offsetLeft - bollWidth && x <= divBox[i].offsetLeft + divBox[i].offsetWidth
+                    && y >= divBox[i].offsetTop - bollWidth  && y <= divBox[i].offsetTop + divBox[i].offsetHeight
+                    && divBox[i].style.display === 'block'){
+                    movey = 1;
+                    divBox[i].style.display = 'none';
+                }
+            }
+        }
+
+
         if (movex) {
             x++;
             if (x>=box.clientWidth-boll.clientWidth) {
@@ -78,7 +143,7 @@
         if (movey) {
             y++;
             if (y>=box.clientHeight-boll.clientHeight
-                || (board.offsetLeft<=x && x<=board.offsetLeft+110  && board.offsetTop === y+10  ))
+                || (board.offsetLeft - bollWidth <=x && x<=board.offsetLeft+120  && board.offsetTop === y+10  ))
             {
                 movey=0;
             }
@@ -86,7 +151,7 @@
         }else{
             y--;
             if (y<=0
-                || (board.offsetLeft<=x && x<=board.offsetLeft+110  &&y===board.offsetTop+15)
+                || (board.offsetLeft - bollWidth <=x && x<=board.offsetLeft+120  && y === board.offsetTop + 15 )
             ) {
                 movey=1;
             }boll.style.top=y+'px';
