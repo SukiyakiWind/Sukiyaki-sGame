@@ -59,11 +59,17 @@
     var initLeft = 50 ;
     var initTop = 20;
     var divBox = [],divBoxLeft = [],divBoxTop = [],boxCount = 0;
-    for (var i = 0; i <= 17; i++){
+    for (var i = 0; i <= 27; i++){
         divBox[i] = creatbox();
         if (i === 0){
             divBox[i].style.left = '50px';
+        }else if( i > 0 && i < 17 ){
+            divBox[i].style.left = parseInt(divBox[i-1].style.left) + divBox[i].offsetWidth + 'px';
+        }else if( i === 17){
+            divBox[i].style.top = initTop + 22 + 'px';
+            divBox[i].style.left = '100px';
         }else{
+            divBox[i].style.top = initTop + 22 + 'px';
             divBox[i].style.left = parseInt(divBox[i-1].style.left) + divBox[i].offsetWidth + 'px';
         }
         divBoxLeft[i] = divBox[i].offsetLeft;
@@ -99,6 +105,7 @@
                 && divBox[i].style.display === 'block'){
                     movex = 0;
                     divBox[i].style.display = 'none';
+                    console.log('move x = 1');
                 }
             }else{
                 if(x >= divBox[i].offsetLeft - bollWidth && x <= divBox[i].offsetLeft + divBox[i].offsetWidth
@@ -106,6 +113,7 @@
                     && divBox[i].style.display === 'block'){
                     movex = 1;
                     divBox[i].style.display = 'none';
+                    console.log('move x = 1');
                 }
             }
             if(movey){
@@ -114,6 +122,7 @@
                     && divBox[i].style.display === 'block'){
                     movey = 0;
                     divBox[i].style.display = 'none';
+                    console.log('move x = 1');
                 }
             }else{
                 if(x >= divBox[i].offsetLeft - bollWidth && x <= divBox[i].offsetLeft + divBox[i].offsetWidth
@@ -121,6 +130,7 @@
                     && divBox[i].style.display === 'block'){
                     movey = 1;
                     divBox[i].style.display = 'none';
+                    console.log('move y = 1');
                 }
             }
         }
